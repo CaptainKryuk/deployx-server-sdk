@@ -1,59 +1,64 @@
-import requests
+from .config import Config
+from .client import DXClient
 
-__env_key = None
+import logging
+logging.basicConfig(level=logging.INFO)
 
-api_url = "http://127.0.0.1:8000/api/client/v1/"
-
-def set_key(key):
-    """
-    * install default enviroment key
-    """
-
-    global __env_key
-
-    __env_key = key
+__config = Config()
+__client = None
 
 
-def get_point(point_name, default):
-    """
-    Point_name using to get general point
-    default using if request from api get False
-    """
+logging.info('Inializating deployx.')
 
-    global __env_key
+def set_config(config):
+    
+    global __config
+    global __client
 
-    if __env_key is not None:
+    logging.info("Initialize new config with manual data.")
+    new_config = __config.set_config(config)
 
-        response = requests.get(api_url + 'get_point/' + get_valid_env_key() + "/" + get_valid_point_name(point_name))
-        
-        if response.status_code == 200:
-            return response.json()
+    try:
+        if __client:
+            logging.info('Close connection in old client.')
+            old_client = __client
+            old_client.close()
+    finally:
+        __config = new_config
+        logging.info('Initializate new client.')
+        new_client = DXClient(config=__config)
+        __client = new_client
 
-        if response.status_code == 400:
-            raise Exception(response.json())
-        
-    raise Exception("You must 'set_key' before getting point")
+def set_sdk_key(key):
+    global __config
+    global __client
+
+    # user already initialized with the same sdk_key
+    if __config.sdk_key == key:
+        logging.info('Client with this key already initialized.')
+
+    # user already initialized with another sdk_key
+    elif __config.sdk_key and __config.sdk_key != key:
+        logging.info('Sdk key was installed. Install new key passed to set_sdk_key().')
+        __config.set_sdk_key(key)
+        if __client:
+            logging.info('Initializate new client.')
+            old_client = __client
+            new_client = DXClient(__config)
+            old_client.close()
+
+    # user not initialized
+    elif not __config.sdk_key:
+        logging.info('Install new sdk_key to exist Config instance')
+        __config.set_sdk_key(key)
+        __client = DXClient(config=__config)
 
 
-def get_valid_env_key():
-    """
-    check valid enviroment key
-    """
-    global __env_key 
-
-    if (len(__env_key) == 64):
-        return str(__env_key)
-
-    raise Exception("Key must be hash64 and str type. Copy your key in DeployX dashboard.")
-
-
-def get_valid_point_name(name):
-    """
-    check valid point name and replace " " with "--"
-    need to send valid param in http request
-    """
-    if isinstance(name, str):
-        return name.replace(" ", "--") 
-    raise Exception("Name of point must be str.")
-
-
+def get(point_key, user, default=None):  
+    if __client and __config.sdk_key:
+        if isinstance(user, dict):
+            __client.get_point(point_key, user, default)
+        else:
+            raise TypeError("User instance must be dict type.")
+    else:
+        raise AttributeError('Client are not found. Call set_config() or set_sdk_key() to initializate client and install required sdk_key.')
