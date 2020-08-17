@@ -3,17 +3,22 @@ import logging
 class Config:
 
     def __init__(self, 
-                 sdk_key=None,
-                 offline=False,
-                 api_url='127.0.0.1'):
+                 sdk_key=None):
         self.sdk_key = sdk_key
-        self.offline = offline
-        self.api_url = api_url
+        self.offline = False
+        self.api_url = '127.0.0.1'
+        self.api_port = '8000'
+
+        self.available_params_list = ['sdk_key']
+
     @classmethod
     def default(cls):
         return cls
 
     def set_config(self, config):
+        """
+        * Install config parametrs from available param list
+        """
         if isinstance(config, Config):
             return self._set_instance_config(config)
 
@@ -25,15 +30,17 @@ class Config:
     
     def _set_instance_config(self, config):
         logging.info('Install config via Config() instance.')
-        if config.sdk_key:
-            return config
-        raise AttributeError('Config intance must include sdk_key attr.')
+        for attr in self.available_params_list:
+            if hasattr(config, attr) and len(getattr(config, attr)):
+                setattr(self, attr, getattr(config, attr))
+        return self
 
     def _set_dict_config(self, config):
-        logging.info('Install config with config dictionary.')
+        logging.info('Install config from config dictionary.')
         for key in config:
-            if hasattr(self, key) and isinstance(config[key], str):
-                setattr(self, key, config[key])
+            if hasattr(self, key) and isinstance(config[key], str) and key in self.available_params_list:
+                if len(config[key]) > 0:
+                    setattr(self, key, config[key])
         return self
 
         

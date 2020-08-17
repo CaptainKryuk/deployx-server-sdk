@@ -54,10 +54,12 @@ def set_sdk_key(key):
         __client = DXClient(config=__config)
 
 
-def get(point_key, user, default=None):  
+def get(point_key, user, default):
+    if type(default) != bool:
+        raise TypeError("Use True or False for default value.")
     if __client and __config.sdk_key:
         if isinstance(user, dict):
-            __client.get_point(point_key, user, default)
+            return __client.get_point(point_key, user, default)
         else:
             raise TypeError("User instance must be dict type.")
     else:
