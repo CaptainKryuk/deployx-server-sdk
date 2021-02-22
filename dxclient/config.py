@@ -6,8 +6,8 @@ class Config:
                  sdk_key=None):
         self.sdk_key = sdk_key
         self.offline = False
-        self.api_url = '127.0.0.1'
-        self.api_port = '8000'
+        self.api_url = 'https://api.deploy-x.com'
+        self.api_port = '80'
 
         self.available_params_list = ['sdk_key']
 

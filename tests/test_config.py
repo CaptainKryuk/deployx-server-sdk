@@ -3,7 +3,7 @@ from . import *
 @pytest.fixture()
 def ready_config():
     # need every time create new object of Config class with blank sdk_key
-    config = src.config.Config()
+    config = dxclient.config.Config()
     return config
 
 # test configs

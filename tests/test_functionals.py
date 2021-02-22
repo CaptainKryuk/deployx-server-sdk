@@ -1,17 +1,22 @@
 from . import *
-import src as dxclient
+import dxclient
 
 
-# Все ок
+#* Все ок
 
-# user пустой
-# identifier капсом
-# identifier = '' (пустой)
-# поля больше 255 символов
+#* user пустой
+#* identifier капсом
+#* identifier = '' (пустой)
+#* поля больше 255 символов
 
-# выключен redis
-# точка не сохранена, нет подключения к сети
-# точка сохранена, отключилась сеть
+#* выключен redis
+#* флаг не сохранен, нет подключения к сети
+#* флаг сохранен, отключилась сеть
+#* пользователь получил первый флаг и если запрашивает второй, то ничего не получает
+
+CONFIG = {
+    'sdk_key': 'c2c5d6c27c4ac191e69309fe0e383ece75ef4b6d4e724aeefb8cfe26f2146f67'
+}
 
 @pytest.mark.incremental
 class TestNormalExperiment:
@@ -24,37 +29,38 @@ class TestNormalExperiment:
             'email': 'bestrongwb@gmail.com',
             'last_name': 'kryukov'  
         }
-
-        dxclient.set_sdk_key("6ee4189e763c2742465eaa90294f6e3f19b2f91258d084f88905c3135486e6c8")
-
+        dxclient.set_sdk_key(CONFIG['sdk_key'])
         feature = dxclient.get('test', user, False)
-
         assert feature == True
+
 
     def test_caps_user_and_point_disabled(self):
         user = {
             'UNIQUE_IDENTIFIER': 'TEST'
         }
-
-        dxclient.set_sdk_key("6ee4189e763c2742465eaa90294f6e3f19b2f91258d084f88905c3135486e6c8")
-
+        dxclient.set_sdk_key(CONFIG['sdk_key'])
         feature = dxclient.get('test', user, False)
-
         assert feature == True
+
+    def test_caps_user_and_point_2disabled(self):
+        user = {
+            'UNIQUE_IDENTIFIER': 'TEST'
+        }
+        dxclient.set_sdk_key(CONFIG['sdk_key'])
+        feature = dxclient.get('test', user, False)
+        assert feature == True
+
 
     def test_blank_dict_user_and_point_enabled(self):
         """ 
         * should create user with unique_identifier == '-' 
         * if user already created just get point from redis
         """
-
         user = {}
-
-        dxclient.set_sdk_key("6ee4189e763c2742465eaa90294f6e3f19b2f91258d084f88905c3135486e6c8")
-
+        dxclient.set_sdk_key(CONFIG['sdk_key'])
         feature = dxclient.get('test', user, False)
-
         assert feature == True
+
 
     def test_blank_identifier_user_and_point_enabled(self):
         """ 
@@ -64,12 +70,10 @@ class TestNormalExperiment:
         user = {
             'UNIQUE_IDENTIFIER': ''
         }
-
-        dxclient.set_sdk_key("6ee4189e763c2742465eaa90294f6e3f19b2f91258d084f88905c3135486e6c8")
-
+        dxclient.set_sdk_key(CONFIG['sdk_key'])
         feature = dxclient.get('test', user, False)
-
         assert feature == True
+
 
     def test_all_blank_user_and_point_enabled(self):
         user = {
@@ -79,12 +83,10 @@ class TestNormalExperiment:
             'email': '',
             'last_name': ''          
         }
-
-        dxclient.set_sdk_key("6ee4189e763c2742465eaa90294f6e3f19b2f91258d084f88905c3135486e6c8")
-
+        dxclient.set_sdk_key(CONFIG['sdk_key'])
         feature = dxclient.get('test', user, False)
-
         assert feature == True
+
 
     def test_blank_identifire_fill_user_and_point_enabled(self):
         user = {
@@ -94,9 +96,6 @@ class TestNormalExperiment:
             'email': 'bestrongwb@gmail.com',
             'last_name': 'kryukov'          
         }
-
-        dxclient.set_sdk_key("6ee4189e763c2742465eaa90294f6e3f19b2f91258d084f88905c3135486e6c8")
-
+        dxclient.set_sdk_key(CONFIG['sdk_key'])
         feature = dxclient.get('test', user, False)
-
         assert feature == True

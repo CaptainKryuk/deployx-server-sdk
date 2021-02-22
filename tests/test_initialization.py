@@ -30,12 +30,12 @@ from . import *
 
 @pytest.fixture(scope='class')
 def config_instance():
-    return src.config.Config()
+    return dxclient.config.Config()
 
 @pytest.fixture(scope='class')
 def client_instance():
-    config = src.config.Config()
-    return src.client.DXClient(config)
+    config = dxclient.config.Config()
+    return dxclient.client.DXClient(config)
 
     
 @pytest.mark.usefixtures('config_instance', 'client_instance')
