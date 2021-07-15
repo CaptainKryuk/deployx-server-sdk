@@ -4,7 +4,9 @@ from .client import DXClient
 import logging
 logging.basicConfig(level=logging.INFO)
 
-__config = Config()
+DEBUG = False
+
+__config = Config(DEBUG)
 __client = None
 
 

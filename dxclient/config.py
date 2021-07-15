@@ -3,11 +3,13 @@ import logging
 class Config:
 
     def __init__(self, 
-                 sdk_key=None):
+                 sdk_key=None,
+                 debug=False):
         self.sdk_key = sdk_key
         self.offline = False
-        self.api_url = 'https://api.deploy-x.com'
-        self.api_port = '80'
+        self.debug = debug
+        self.api_url = 'https://api.deploy-x.com' if not debug else 'http://127.0.0.1'
+        self.api_port = '80' if not debug else '8000'
 
         self.available_params_list = ['sdk_key']
 

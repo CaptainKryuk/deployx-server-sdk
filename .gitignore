@@ -9,3 +9,7 @@ __pycache__/
 
 .vscode
 setup.py
+
+build/
+dist/
+deployx_server_sdk*

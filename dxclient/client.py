@@ -10,10 +10,10 @@ class DXClient:
         self.config = config
 
         logging.info('Start Pool connection to host.')
-        self.pool = HTTPSConnectionPool(self.config.api_url, port=self.config.api_port)
-        # self.pool = HTTPSConnectionPool(self.config.api_url, port=self.config.api_port)
-        # print(self.pool, dir(self.pool), self.pool.host, self.pool.port, self.pool.ssl_version)
-
+        if not self.config.debug:
+            self.pool = HTTPSConnectionPool(self.config.api_url, port=self.config.api_port)
+        else:
+            self.pool = HTTPConnectionPool(self.config.api_url, port=self.config.api_port)
         # initializate redis database
         self.store = FeaturePointStore()
 
