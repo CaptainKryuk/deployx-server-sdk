@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.INFO)
 
 DEBUG = False
 
-__config = Config(DEBUG)
+__config = Config(debug=DEBUG)
 __client = None
 
 
@@ -46,7 +46,7 @@ def set_sdk_key(key):
         if __client:
             logging.info('Initializate new client.')
             old_client = __client
-            new_client = DXClient(__config)
+            __client = DXClient(__config)
             old_client.close()
 
     # user not initialized
@@ -56,13 +56,13 @@ def set_sdk_key(key):
         __client = DXClient(config=__config)
 
 
-def get(point_key, user, default):
+def get(flag_key, user, default):
     if type(default) != bool:
         raise TypeError("Use True or False for default value.")
     if __client and __config.sdk_key:
         if isinstance(user, dict):
-            return __client.get_point(point_key, user, default)
+            return __client.get_flag(flag_key, user, default)
         else:
             raise TypeError("User instance must be dict type.")
     else:
-        raise AttributeError('Client are not found. Call set_config() or set_sdk_key() to initializate client and install required sdk_key.')
+        raise AttributeError('Client was not found. Call set_config() or set_sdk_key() to initializate client and install required sdk_key.')

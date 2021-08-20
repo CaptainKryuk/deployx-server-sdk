@@ -1,5 +1,4 @@
 from . import *
-import dxclient
 
 
 #* Все ок
@@ -21,7 +20,7 @@ CONFIG = {
 @pytest.mark.incremental
 class TestNormalExperiment:
 
-    def test_all_valid_data_and_point_enabled(self):
+    def test_all_valid_data_and_flag_enabled(self):
         user = {
             'unique_identifier': 'MYIDENTIFIER123',
             'username': 'captainkryuk',
@@ -34,7 +33,7 @@ class TestNormalExperiment:
         assert feature == True
 
 
-    def test_caps_user_and_point_disabled(self):
+    def test_caps_user_and_flag_disabled(self):
         user = {
             'UNIQUE_IDENTIFIER': 'TEST'
         }
@@ -42,7 +41,7 @@ class TestNormalExperiment:
         feature = dxclient.get('test', user, False)
         assert feature == True
 
-    def test_caps_user_and_point_2disabled(self):
+    def test_caps_user_and_flag_2disabled(self):
         user = {
             'UNIQUE_IDENTIFIER': 'TEST'
         }
@@ -51,10 +50,10 @@ class TestNormalExperiment:
         assert feature == True
 
 
-    def test_blank_dict_user_and_point_enabled(self):
+    def test_blank_dict_user_and_flag_enabled(self):
         """ 
         * should create user with unique_identifier == '-' 
-        * if user already created just get point from redis
+        * if user already created just get flag from redis
         """
         user = {}
         dxclient.set_sdk_key(CONFIG['sdk_key'])
@@ -62,10 +61,10 @@ class TestNormalExperiment:
         assert feature == True
 
 
-    def test_blank_identifier_user_and_point_enabled(self):
+    def test_blank_identifier_user_and_flag_enabled(self):
         """ 
         * should create user with unique_identifier == '-' 
-        * if user already created just get point from redis
+        * if user already created just get flag from redis
         """
         user = {
             'UNIQUE_IDENTIFIER': ''
@@ -75,7 +74,7 @@ class TestNormalExperiment:
         assert feature == True
 
 
-    def test_all_blank_user_and_point_enabled(self):
+    def test_all_blank_user_and_flag_enabled(self):
         user = {
             'unique_identifier': '',
             'username': '',
@@ -88,7 +87,7 @@ class TestNormalExperiment:
         assert feature == True
 
 
-    def test_blank_identifire_fill_user_and_point_enabled(self):
+    def test_blank_identifire_fill_user_and_flag_enabled(self):
         user = {
             'unique_identifier': '',
             'username': 'username',

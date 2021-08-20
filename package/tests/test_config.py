@@ -12,7 +12,10 @@ class TestSetSdkKeyFunction:
     def test_init_config(self, ready_config):
         assert ready_config.sdk_key == None
         assert ready_config.offline == False
-        # assert ready_config.api_url == 'api.deploy-x.com'
+        if ready_config.debug == False:
+            assert ready_config.api_url == 'https://api.deploy-x.com'
+        else:
+            assert ready_config.api_url == 'http://127.0.0.1'
 
     # test set_sdk_key() function
     def test_install_valid_sdk_key(self, ready_config):
@@ -96,7 +99,7 @@ class TestSetConfigFunctionDict:
     def test_unavailable_attrs(self, config, expected, ready_config):
         """ Test with unavailable params. They are exist in class, but they can't be changed """
         ready_config.set_config(config)
-        assert ready_config.api_url == '127.0.0.1'
+        assert ready_config.api_url == 'http://127.0.0.1' if ready_config.debug else 'https://api.deploy-x.com'
         assert ready_config.sdk_key == 'test_sdk_key'
 
 

@@ -8,7 +8,7 @@ class Config:
         self.sdk_key = sdk_key
         self.offline = False
         self.debug = debug
-        self.api_url = 'https://api.deploy-x.com' if not debug else 'http://127.0.0.1'
+        self.api_url = 'api.deploy-x.com' if not debug else 'localhost'
         self.api_port = '80' if not debug else '8000'
 
         self.available_params_list = ['sdk_key']

@@ -1,20 +1,19 @@
 import logging
 
-class FeaturePointStore:
+class FeatureFlagStore:
     """
-    add new point to redis
-    update already created point in redis
+    add new flag to redis
+    update already created flag in redis
     """
 
     def __init__(self):
         # * Initializate and check redis database
-        logging.info('Save point in store')
+        logging.info('Save flag in store')
+        self.redis_db = False
 
         try:
             import redis
             from redis.connection import ConnectionError
-
-            self.redis_db = False
 
             try:
                 self.r = redis.Redis()
@@ -24,12 +23,12 @@ class FeaturePointStore:
                 logging.info("Redis database is not running.")
 
         except ModuleNotFoundError:
-            logging.info("Redis not installed. Use default statuses instead of redis database.")
+            logging.info("Redis not installed. Use received statuses instead of redis database.")
 
-    def init_user(self, config, user, point_key):
+    def init_user(self, config, user, flag_key):
         self.config = config
         self.user = user
-        self.point_key = point_key
+        self.flag_key = flag_key
 
     def save(self, status):
         identifier = '-'
@@ -38,7 +37,7 @@ class FeaturePointStore:
             if key in self.user:
                 identifier = self.user[key]
             
-        self.r.hset(identifier, '{}_{}'.format(self.config.sdk_key, self.point_key), str(status))
+        self.r.hset(identifier, '{}_{}'.format(self.config.sdk_key, self.flag_key), str(status))
 
     def decode_status(self, status): 
         if status == 'True':
@@ -48,7 +47,7 @@ class FeaturePointStore:
         elif int(status) in range(10):
             return int(status)
         else:
-            raise TypeError('Error while getting status. Check your point available.')
+            raise TypeError('Error while getting status. Check your flag available.')
 
     def decode_byte_status(self, status):
         return self.decode_status(status.decode('utf-8'))

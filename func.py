@@ -1,10 +1,10 @@
-import dxclient
+from package.src import dxclient
 
-dxclient.set_sdk_key("35891ef8a8214c1e0a79ceef8b2e80230a41a40bc1162fea6d8bad37047bfc4a")
+dxclient.set_sdk_key("39f16f86de5419fd974eec6c6611526120cbf11a76c4a1f4fe2fb5c294989496")
 
-point = dxclient.get("api", {}, True)
+flag = dxclient.get("test", {'unique_identifier': 'vic', 'username': 'Johny'}, True)
 
-if point:
+if flag:
   print("работает новая версия")
 else:
   print("работает старая версия")

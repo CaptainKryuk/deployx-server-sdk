@@ -13,3 +13,5 @@ setup.py
 build/
 dist/
 deployx_server_sdk*
+.pytest_cache
+checking_rep/
