@@ -17,22 +17,6 @@ __client = None
 logging.info('Inializating deployx.')
 
 
-def _is_offline():
-    """
-    check internet connection status
-    by requesting google.com
-    """
-    pass
-    # import requests
-    # requests.adapters.DEFAULT_RETRIES = 0
-    # requests.get('https://google.com', timeout=0.1)
-    # try:
-    #     requests.get('https://google.com', timeout=0.4)
-    #     return False
-    # except:
-    #     return True
-
-
 def _set_client_debug():
     import socket
     ip_addr = socket.gethostbyname(socket.gethostname())
