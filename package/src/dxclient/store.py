@@ -8,7 +8,6 @@ class FeatureFlagStore:
 
     def __init__(self):
         # * Initializate and check redis database
-        logging.info('Save flag in store')
         self.redis_db = False
 
         try:
@@ -23,7 +22,7 @@ class FeatureFlagStore:
                 logging.info("Redis database is not running.")
 
         except ModuleNotFoundError:
-            logging.info("Redis not installed. Use received statuses instead of redis database.")
+            logging.info("Redis not installed. If internet connection wiil be lost, you will get default value instead of redis.")
 
     def init_user(self, config, user, flag_key):
         self.config = config
@@ -36,7 +35,7 @@ class FeatureFlagStore:
         for key in type_of_statuses:
             if key in self.user:
                 identifier = self.user[key]
-            
+        logging.info('Save flag in store')
         self.r.hset(identifier, '{}_{}'.format(self.config.sdk_key, self.flag_key), str(status))
 
     def decode_status(self, status): 
@@ -47,7 +46,7 @@ class FeatureFlagStore:
         elif int(status) in range(10):
             return int(status)
         else:
-            raise TypeError('Error while getting status. Check your flag available.')
+            raise TypeError('Error while getting status. Check your flag availability.')
 
     def decode_byte_status(self, status):
         return self.decode_status(status.decode('utf-8'))
