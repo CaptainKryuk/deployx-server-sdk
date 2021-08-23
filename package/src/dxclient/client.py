@@ -33,7 +33,7 @@ class DXClient:
                                     '/api/client/v1/get_point/{}/{}/'.format(self.config.sdk_key, self.flag_key),
                                     headers={'Content-Type': 'application/json'},
                                     body=json.dumps(user),
-                                    timeout=0.3)
+                                    timeout=1)
                 data = json.loads(r.data)
 
                 if r.status == 200:

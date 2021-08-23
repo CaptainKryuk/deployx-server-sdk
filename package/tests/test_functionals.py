@@ -20,7 +20,7 @@ from . import *
 # тоже самое, что на строчку выше, только default Значения не передаются. Результат - AttributeError 
 
 CONFIG = {
-    'sdk_key': 'c2c5d6c27c4ac191e69309fe0e383ece75ef4b6d4e724aeefb8cfe26f2146f67'
+    'sdk_key': 'c5d5ee91c434e3f80085733aae94211626ad839162e9f8cb37f74b91007f51e5'
 }
 
 @pytest.mark.incremental

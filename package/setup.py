@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="deployx-server-sdk",
-    version="1.0.7",
+    version="1.0.8",
     author="CaptainKryuk",
     author_email="sir.kryukov@gmail.com",
     description="Programm for fast deploy and autotests",
@@ -23,8 +23,7 @@ setuptools.setup(
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
     install_requires=[
-        'urllib3',
-        'requests'
+        'urllib3'
     ],
     python_requires=">=3.6",
 )
